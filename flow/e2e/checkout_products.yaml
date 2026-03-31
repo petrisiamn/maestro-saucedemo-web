@@ -1,0 +1,52 @@
+url: https://www.saucedemo.com/
+---
+# Scenario 1: Add to Cart
+- runFlow: "common/login_valid_creds.yaml"
+- tapOn: Add to cart
+- tapOn:
+    id: shopping_cart_container
+- scrollUntilVisible:
+    element: Checkout
+- tapOn: Checkout
+- tapOn: First Name
+- inputText: ${faker.name().firstName()}
+- tapOn: Last Name
+- inputText: ${faker.name().lastName()}
+- tapOn: Zip/Postal Code
+- inputText: ${faker.number().digits(5)}
+- tapOn: Continue
+- scrollUntilVisible:
+    element: Finish
+- tapOn: Finish
+- assertVisible: Thank you for your order!
+- assertVisible:
+    id: checkout_complete_container
+
+# Scenario 2: Add to Cart
+- runFlow: "common/login_valid_creds.yaml"
+- tapOn: Add to cart
+- tapOn:
+    id: shopping_cart_container
+- scrollUntilVisible:
+    element: Checkout
+- tapOn: Checkout
+- tapOn: First Name
+- inputText: John
+- tapOn: Last Name
+- inputText: Doe
+- tapOn: Continue
+- assertVisible: "Error: Postal Code is required"
+
+# Scenario 3: Empty Cart Before Adding Items
+- runFlow: "common/login_valid_creds.yaml"
+- assertTrue: "document.querySelectorAll('.cart_item').length > 0" # Check if cart is not empty
+- extractTextWithAI:
+    query: 'document.querySelector(''[data-test="shopping-cart-badge"]'').innerText'
+    outputVariable: "cartItemCount"
+# Repeat the removal command based on the cart item count
+- repeat:
+    times: ${parseInt(cartItemCount)} # Convert the string to an integer
+    commands:
+      - tapOn: Remove
+- tapOn: Add to cart
+- assertTrue: "document.querySelectorAll('.cart_item').length = 0" # Check if cart is empty
