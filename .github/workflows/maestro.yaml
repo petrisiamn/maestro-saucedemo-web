@@ -20,4 +20,4 @@ jobs:
         run: echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
       - name: Run Maestro Tests
-        run: maestro web-flow.yaml
+        run: maestro test web-flow.yaml
