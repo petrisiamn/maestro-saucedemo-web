@@ -16,6 +16,11 @@ jobs:
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: "stable"
+
       - name: Add Maestro to PATH
         run: echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
