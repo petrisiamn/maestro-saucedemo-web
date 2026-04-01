@@ -1,7 +1,10 @@
 url: https://www.saucedemo.com/
+properties:
+  testCaseId: "TC-101"
 ---
-# Scenario 1: Add to Cart
+# Scenario 1: Checkout
 - runFlow: "common/login_valid_creds.yaml"
+- runFlow: "common/empty_cart.yaml"
 - tapOn: Add to cart
 - tapOn:
     id: shopping_cart_container
@@ -22,7 +25,7 @@ url: https://www.saucedemo.com/
 - assertVisible:
     id: checkout_complete_container
 
-# Scenario 2: Add to Cart
+# Scenario 2: Add to Cart - negative scenario
 - runFlow: "common/login_valid_creds.yaml"
 - tapOn: Add to cart
 - tapOn:
@@ -36,17 +39,3 @@ url: https://www.saucedemo.com/
 - inputText: Doe
 - tapOn: Continue
 - assertVisible: "Error: Postal Code is required"
-
-# Scenario 3: Empty Cart Before Adding Items
-- runFlow: "common/login_valid_creds.yaml"
-- assertTrue: "document.querySelectorAll('.cart_item').length > 0" # Check if cart is not empty
-- extractTextWithAI:
-    query: 'document.querySelector(''[data-test="shopping-cart-badge"]'').innerText'
-    outputVariable: "cartItemCount"
-# Repeat the removal command based on the cart item count
-- repeat:
-    times: ${parseInt(cartItemCount)} # Convert the string to an integer
-    commands:
-      - tapOn: Remove
-- tapOn: Add to cart
-- assertTrue: "document.querySelectorAll('.cart_item').length = 0" # Check if cart is empty

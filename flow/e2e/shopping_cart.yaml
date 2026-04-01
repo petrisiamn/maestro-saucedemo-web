@@ -1,0 +1,17 @@
+url: https://www.saucedemo.com/
+properties:
+  testCaseId: 'TC-102'
+---
+- runFlow: 'common/login_valid_creds.yaml'
+- assertTrue: "document.querySelectorAll('.cart_item').length > 0" # Check if cart is not empty
+- extractTextWithAI:
+    query: "document.querySelector('[data-test=\"shopping-cart-badge\"]').innerText"
+    outputVariable: 'cartItemCount'
+# Repeat the removal command based on the cart item count
+- evalScript: '${console.log("Value: " + cartItemCount)}'
+- repeat:
+    times: ${parseInt(cartItemCount)} # Convert the string to an integer
+    commands:
+      - tapOn: Remove
+- tapOn: Add to cart
+- assertTrue: "document.querySelectorAll('.cart_item').length = 0" # Check if cart is empty
