@@ -31,10 +31,6 @@ maestro-saucedemo-web/
 
 to do
 
-### Setup `.env.secret` for local development
-
-to do
-
 
 ## 🚀 Getting Started
 
